@@ -1,0 +1,62 @@
+{
+    "44d88612fea8a8f36de82e1278abb02f": {
+        "name": "EICAR Test File",
+        "type": "malicious",
+        "description": "Standard antivirus test string",
+        "source": "local-db-v1"
+    },
+    "d41d8cd98f00b204e9800998ecf8427e": {
+        "name": "Empty File Hash",
+        "type": "benign",
+        "description": "Hash of empty input",
+        "source": "local-db-v1"
+    },
+        "5d41402abc4b2a76b9719d911017c592": {
+        "name": "Hello (md5)",
+        "type": "benign",
+        "description": "MD5 hash of 'hello'",
+        "source": "local-db-v1"
+    },
+    "e99a18c428cb38d5f260853678922e03": {
+        "name": "Hello World variant",
+        "type": "benign",
+        "description": "MD5 hash of 'abc123'",
+        "source": "local-db-v1"
+    },
+    "098f6bcd4621d373cade4e832627b4f6": {
+        "name": "Test String",
+        "type": "benign",
+        "description": "MD5 hash of 'test'",
+        "source": "local-db-v1"
+    },
+    "c3fcd3d76192e4007dfb496cca67e13b": {
+        "name": "Sample Hash A",
+        "type": "malicious",
+        "description": "Simulated malware signature A",
+        "source": "local-db-v1"
+    },
+    "900150983cd24fb0d6963f7d28e17f72": {
+        "name": "Sample Hash B",
+        "type": "malicious",
+        "description": "Simulated malware signature B",
+        "source": "local-db-v1"
+    },
+    "827ccb0eea8a706c4c34a16891f84e7b": {
+        "name": "12345 password hash",
+        "type": "benign",
+        "description": "Weak password MD5 hash",
+        "source": "local-db-v1"
+    },
+    "25d55ad283aa400af464c76d713c07ad": {
+        "name": "Common password hash",
+        "type": "suspicious",
+        "description": "MD5 of '12345678'",
+        "source": "local-db-v1"
+    },
+    "4a7d1ed414474e4033ac29ccb8653d9b": {
+        "name": "Random sample hash",
+        "type": "unknown",
+        "description": "Placeholder entry for testing unknown classification",
+        "source": "local-db-v1"
+    }
+}
