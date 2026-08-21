@@ -1,10 +1,9 @@
 import hash_utils
-import json
+import database
 
 def main():
     # Opening the locally saved known hashes
-    with open("known_hashes.json", "r") as file:
-        database = json.load(file)
+    known_hashes = database.load_database()
     print("Hello Threat and Hash checks: ")
 
     while True:
@@ -15,17 +14,20 @@ def main():
         hash_result = hash_utils.hash_type(user_input)
 
         # Input validation
-        if hash_result == "Not a hash":
+        if user_input == "Not a hash":
             print("Try again, not a valid hash")
             continue
-        elif user_input in database:
-            data = database[user_input]
-            print("Found in local database")
-            print("NAME: ", data["name"])
+        data = database.lookup_hash(known_hashes, user_input)
+
+        if data is not None:
+            print("\nFound in local known_hashes")
+            print("NAME:", data["name"])
             print("Status:", data["type"])
             print("Description:", data["description"])
         else:
-            print("Hash not found in local database")
+            print("\nHash not found in local known_hashes")
+
+
         print("\nHash Analysis:")
         print("Input: ", user_input) 
         print("Type: ", hash_result)
