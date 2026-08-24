@@ -20,15 +20,17 @@ def main():
         data = database.lookup_hash(known_hashes, user_input)
 
         if data is not None:
+            print(("========================================="))
             print("\nFound in local known_hashes")
             print("NAME:", data["name"])
             print("Status:", data["type"])
             print("Description:", data["description"])
         else:
+            print("=========================================")
             print("\nHash not found in local known_hashes")
 
 
-        print("\nHash Analysis:")
+        print("Hash Analysis:")
         print("Input: ", user_input) 
         print("Type: ", hash_result)
 

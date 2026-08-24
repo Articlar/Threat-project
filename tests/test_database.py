@@ -1,4 +1,4 @@
-from app.database import lookup_hash
+from app.database import load_database, lookup_hash
 
 def test_lookup_existing_hash():
     database = {
@@ -25,3 +25,9 @@ def test_lookup_unknown_hash():
     result = lookup_hash(database, "doesnotexist")
 
     assert result is None
+
+def test_load_database():
+    database = load_database()
+
+    assert isinstance(database, dict)
+    assert "44d88612fea8a8f36de82e1278abb02f" in database
