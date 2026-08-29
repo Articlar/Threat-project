@@ -1,4 +1,7 @@
-from app.database import load_database, lookup_hash
+from app.database import (
+    load_database, 
+    lookup_hash
+)
 
 def test_lookup_existing_hash():
     database = {
