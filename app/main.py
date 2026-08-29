@@ -46,18 +46,18 @@ def main():
                 print("Could not extract a domain")
                 continue
             
-            is_domain = url_utils.check_domain(user_input)
+            is_domain = url_utils.check_domain(domain)
             if not is_domain:
                 print("Invalid domain")
                 continue
 
-            ip_address = url_utils.resolve_domain(user_input)
+            ip_address = url_utils.resolve_domain(domain)
             if ip_address is None:
                 print("Domain does not resolve")
                 continue
-            https_status, http_status = url_utils.get_http_info(user_input)
+            https_status, http_status = url_utils.get_http_info(domain)
             result = {
-                "domain": user_input,
+                "domain": domain,
                 "valid_domain": True,
                 "ip_address": ip_address,
                 "https_status": https_status,
