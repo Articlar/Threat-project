@@ -8,7 +8,8 @@ from app.url_utils import (
     analyze_domain,
     count_subdomains,
     get_domain_length,
-    get_ip_version
+    get_ip_version,
+    analyze_url
 )
 
 def test_extract_domain():
@@ -85,3 +86,18 @@ def test_get_ip_version():
     assert get_ip_version("8.8.8.8") == 4
     assert get_ip_version("2001:4860:4860::8888") == 6
     assert get_ip_version("example.com") is None
+
+def test_analyze_url():
+    result = analyze_url("https://example.com/login?id=123")
+
+    assert result["url_length"] > 0
+    assert result["path_length"] == 6
+    assert result["query_length"] == 6
+    assert result["has_query"] is True
+    assert result["has_fragment"] is False
+    assert result["percent_encoded"] is False
+
+def test_analyze_url_encoded():
+    result = analyze_url("https://example.com/%2Fadmin")
+
+    assert result["percent_encoded"] is True

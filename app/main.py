@@ -69,10 +69,9 @@ def main():
                 continue
 
             https_status, http_status = url_utils.get_http_info(domain)
-
             certificate_info = url_utils.get_certificate_info(domain)
-
             heuristics = url_utils.analyze_domain(domain)
+            url_analysis = url_utils.analyze_url(user_input)
 
             result = {
                 "domain": domain,
@@ -81,7 +80,8 @@ def main():
                 "https_status": https_status,
                 "http_status": http_status,
                 "certificate": certificate_info,
-                "heuristics": heuristics
+                "heuristics": heuristics,
+                "url_analysis": url_analysis
             }
 
             print("\nDomain Analysis Result:")

@@ -33,6 +33,20 @@ def analyze_domain(domain):
         "domain_length": get_domain_length(domain)
     }
 
+def analyze_url(user_input):
+    if "://" not in user_input:
+        user_input = "https://" + user_input
+    parsed_url = urlparse(user_input)
+
+    return {
+        "url_length": len(user_input),
+        "path_length": len(parsed_url.path),
+        "query_length": len(parsed_url.query),
+        "has_query": bool(parsed_url.query),
+        "has_fragment": bool(parsed_url.fragment),
+        "percent_encoded": "%" in user_input
+    }
+
 def extract_domain(user_input):
     if "://" not in user_input:
         user_input = "https://" + user_input
