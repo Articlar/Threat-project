@@ -19,6 +19,13 @@ def is_ip_address(address):
     except ValueError:
         return False
 
+def get_ip_version(address):
+    try:
+        ip = ipaddress.ip_address(address)
+        return ip.version
+    except ValueError:
+        return None
+
 def analyze_domain(domain):
     return {
         "is_ip_address": is_ip_address(domain),

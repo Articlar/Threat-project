@@ -7,7 +7,8 @@ from app.url_utils import (
     is_ip_address,
     analyze_domain,
     count_subdomains,
-    get_domain_length
+    get_domain_length,
+    get_ip_version
 )
 
 def test_extract_domain():
@@ -59,6 +60,8 @@ def test_is_ip_address():
     assert is_ip_address("192.168.1.1") is True
     assert is_ip_address("8.8.8.8") is True
     assert is_ip_address("example.com") is False
+    assert is_ip_address("2001:4860:4860::8888") is True
+    assert is_ip_address("example.com") is False
 
 
 def test_count_subdomains():
@@ -77,3 +80,8 @@ def test_analyze_domain():
     assert result["is_ip_address"] is False
     assert result["subdomain_count"] == 1
     assert result["domain_length"] == 15
+
+def test_get_ip_version():
+    assert get_ip_version("8.8.8.8") == 4
+    assert get_ip_version("2001:4860:4860::8888") == 6
+    assert get_ip_version("example.com") is None

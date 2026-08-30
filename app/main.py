@@ -11,7 +11,8 @@ def main():
         print("================= Threat and Hash Checks ================\n")
         print("1. HASH ANALYSIS")
         print("2. DOMAIN ANALYSIS")
-        print("3. EXIT")
+        print("3. IP ANALYSIS")
+        print("999. EXIT")
         choice = input("Type a number: ")
 
         # Hash Analysis Option
@@ -25,19 +26,20 @@ def main():
                 continue
             data = database.lookup_hash(known_hashes, user_input)
 
+            result = {
+                "hash": user_input,
+                "hash_type": hash_result,
+                "found_in_local_database": data is not None,
+                "name": None,
+                "status": None,
+                "description": None
+            }
+
             if data is not None:
-                print(("========================================="))
-                print("\nFound in local known_hashes")
-                print("NAME:", data["name"])
-                print("Status:", data["type"])
-                print("Description:", data["description"])
-            else:
-                print("=========================================")
-                print("\nHash not found in local known_hashes")
-                
-                print("Hash Analysis:")
-                print("Input: ", user_input) 
-                print("Type: ", hash_result)
+                result["name"] = data["name"]
+                result["status"] = data["type"]
+                result["description"] = data["description"]
+            print(json.dumps(result, indent=4))
 
         # Domain Analysis Option
         elif choice == "2":
@@ -50,7 +52,11 @@ def main():
             if domain is None:
                 print("Could not extract a domain")
                 continue
-            
+
+            if url_utils.is_ip_address(domain):
+                print("IP address. Use IP Analysis instead")
+                continue
+
             is_domain = url_utils.check_domain(domain)
             if not is_domain:
                 print("Invalid domain")
@@ -82,6 +88,25 @@ def main():
             print(json.dumps(result, indent=4))
 
         elif choice == "3":
+            print("======== IP Analysis ========")
+
+            user_input = input("Input IP address here: ")
+
+            if not url_utils.is_ip_address(user_input):
+                print("Invalid IP Address")
+                continue
+            ip_version = url_utils.get_ip_version(user_input)
+
+            result = {
+                "ip_address": user_input,
+                "valid_ip": True,
+                "version": ip_version
+            }
+
+            print("\nIP Analysis:")
+            print(json.dumps(result, indent=4))
+
+        elif choice == "999":
             break
 
         else:
