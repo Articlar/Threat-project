@@ -46,12 +46,16 @@ def get_http_info(domain):
     try:
         with urllib.request.urlopen(https_url) as response:
             https_status = response.status
+    except urllib.error.HTTPError as error:
+        https_status = error.code
     except urllib.error.URLError:
         https_status = None
 
     try:
         with urllib.request.urlopen(http_url) as response:
             http_status = response.status
+    except urllib.error.HTTPError as error:
+        http_status = error.code
     except urllib.error.URLError:
         http_status = None
     return https_status, http_status
