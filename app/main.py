@@ -1,6 +1,7 @@
 import hash_utils
 import database
 import url_utils
+import json
 
 def main():
     # Opening the locally saved known hashes
@@ -39,7 +40,8 @@ def main():
         elif choice == "2":
             print("======== Domain Analysis ========")
             user_input = input("Input URL here: ")
-            # Checks for https:// or http
+
+            # Gets hostname from user input
             domain = url_utils.extract_domain(user_input)
 
             if domain is None:
@@ -51,19 +53,27 @@ def main():
                 print("Invalid domain")
                 continue
 
+            # DNS resolution
             ip_address = url_utils.resolve_domain(domain)
             if ip_address is None:
                 print("Domain does not resolve")
                 continue
+
             https_status, http_status = url_utils.get_http_info(domain)
+
+            certificate_info = url_utils.get_certificate_info(domain)
+
             result = {
                 "domain": domain,
                 "valid_domain": True,
                 "ip_address": ip_address,
                 "https_status": https_status,
-                "http_status": http_status
+                "http_status": http_status,
+                "certificate": certificate_info
             }
-            print(result)
+            
+            print("\nDomain Analysis Result:")
+            print(json.dumps(result, indent=4))
 
         elif choice == "3":
             break

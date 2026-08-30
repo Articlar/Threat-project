@@ -2,7 +2,8 @@ from app.url_utils import (
     extract_domain, 
     check_domain, 
     resolve_domain, 
-    get_http_info
+    get_http_info,
+    get_certificate_info
 )
 
 def test_extract_domain():
@@ -40,3 +41,12 @@ def test_get_http_info():
 
     assert isinstance(https_status, int) or https_status is None
     assert isinstance(http_status, int) or http_status is None
+
+def test_get_certificate_info():
+    result = get_certificate_info("example.com")
+
+    assert result is not None
+    assert isinstance(result, dict)
+    assert "issuer" in result
+    assert "subject" in result
+    assert "not_after" in result

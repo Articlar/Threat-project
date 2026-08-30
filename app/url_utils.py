@@ -1,3 +1,4 @@
+import ssl
 import socket
 import urllib.request
 import urllib.error
@@ -60,3 +61,23 @@ def get_http_info(domain):
         http_status = None
     return https_status, http_status
 
+def get_certificate_info(domain):
+    try:
+        context = ssl.create_default_context()
+
+        # Create HTTPS connection to get certificate information through TLS validation
+        with socket.create_connection((domain, 443), timeout=5) as sock:
+            with context.wrap_socket(sock, server_hostname=domain) as secure_sock:
+                certificate = secure_sock.getpeercert()
+
+        return {
+            "issuer": certificate.get("issuer"),
+            "subject": certificate.get("subject"),
+            "version": certificate.get("version"),
+            "serial_number": certificate.get("serialNumber"),
+            "not_before": certificate.get("notBefore"),
+            "not_after": certificate.get("notAfter")
+        }
+
+    except (socket.error, ssl.SSLError):
+        return None
