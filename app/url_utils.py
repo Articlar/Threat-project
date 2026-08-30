@@ -3,6 +3,28 @@ import socket
 import urllib.request
 import urllib.error
 from urllib.parse import urlparse
+import ipaddress
+
+def count_subdomains(domain):
+    parts = domain.split(".")
+    return max(len(parts) - 2, 0)
+
+def get_domain_length(domain):
+    return len(domain)
+
+def is_ip_address(address):
+    try:
+        ipaddress.ip_address(address)
+        return True
+    except ValueError:
+        return False
+
+def analyze_domain(domain):
+    return {
+        "is_ip_address": is_ip_address(domain),
+        "subdomain_count": count_subdomains(domain),
+        "domain_length": get_domain_length(domain)
+    }
 
 def extract_domain(user_input):
     if "://" not in user_input:

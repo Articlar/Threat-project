@@ -14,6 +14,7 @@ def main():
         print("3. EXIT")
         choice = input("Type a number: ")
 
+        # Hash Analysis Option
         if choice == "1":
             print("======== Hash Analysis ========")
             user_input = input("Input hash here: ")
@@ -37,6 +38,8 @@ def main():
                 print("Hash Analysis:")
                 print("Input: ", user_input) 
                 print("Type: ", hash_result)
+
+        # Domain Analysis Option
         elif choice == "2":
             print("======== Domain Analysis ========")
             user_input = input("Input URL here: ")
@@ -63,15 +66,18 @@ def main():
 
             certificate_info = url_utils.get_certificate_info(domain)
 
+            heuristics = url_utils.analyze_domain(domain)
+
             result = {
                 "domain": domain,
                 "valid_domain": True,
                 "ip_address": ip_address,
                 "https_status": https_status,
                 "http_status": http_status,
-                "certificate": certificate_info
+                "certificate": certificate_info,
+                "heuristics": heuristics
             }
-            
+
             print("\nDomain Analysis Result:")
             print(json.dumps(result, indent=4))
 

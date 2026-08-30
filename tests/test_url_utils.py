@@ -3,7 +3,11 @@ from app.url_utils import (
     check_domain, 
     resolve_domain, 
     get_http_info,
-    get_certificate_info
+    get_certificate_info,
+    is_ip_address,
+    analyze_domain,
+    count_subdomains,
+    get_domain_length
 )
 
 def test_extract_domain():
@@ -50,3 +54,26 @@ def test_get_certificate_info():
     assert "issuer" in result
     assert "subject" in result
     assert "not_after" in result
+
+def test_is_ip_address():
+    assert is_ip_address("192.168.1.1") is True
+    assert is_ip_address("8.8.8.8") is True
+    assert is_ip_address("example.com") is False
+
+
+def test_count_subdomains():
+    assert count_subdomains("example.com") == 0
+    assert count_subdomains("www.example.com") == 1
+    assert count_subdomains("a.b.example.com") == 2
+
+
+def test_get_domain_length():
+    assert get_domain_length("example.com") == 11
+
+
+def test_analyze_domain():
+    result = analyze_domain("www.example.com")
+
+    assert result["is_ip_address"] is False
+    assert result["subdomain_count"] == 1
+    assert result["domain_length"] == 15
