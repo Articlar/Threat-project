@@ -2,6 +2,8 @@ import hash_utils
 import database
 import url_utils
 import json
+import virustotal
+
 
 def main():
     # Opening the locally saved known hashes
@@ -26,19 +28,24 @@ def main():
                 continue
             data = database.lookup_hash(known_hashes, user_input)
 
+            virustotal_result = virustotal.get_hash_report(user_input)
+
             result = {
                 "hash": user_input,
                 "hash_type": hash_result,
                 "found_in_local_database": data is not None,
                 "name": None,
                 "status": None,
-                "description": None
+                "description": None,
+                "virustotal": virustotal_result
             }
 
             if data is not None:
                 result["name"] = data["name"]
                 result["status"] = data["type"]
                 result["description"] = data["description"]
+
+            print("\n Hash Analysis Result")
             print(json.dumps(result, indent=4))
 
         # Domain Analysis Option
