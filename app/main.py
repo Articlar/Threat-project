@@ -3,6 +3,7 @@ import database
 import url_utils
 import json
 import virustotal
+import file_utils
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
         print("1. HASH ANALYSIS")
         print("2. DOMAIN ANALYSIS")
         print("3. IP ANALYSIS")
+        print("4. FILE ANALYSIS")
         print("999. EXIT")
         choice = input("Type a number: ")
 
@@ -98,6 +100,7 @@ def main():
             print("\nDomain Analysis Result:")
             print(json.dumps(result, indent=4))
 
+        # IP Analysis Choice
         elif choice == "3":
             print("======== IP Analysis ========")
 
@@ -119,6 +122,26 @@ def main():
             print("\nIP Analysis:")
             print(json.dumps(result, indent=4))
 
+        # File Analysis Option
+        elif choice == "4":
+            print("======== File Analysis ========")
+
+            file_path = input("Input file path here: ")
+
+            hashes = file_utils.calculate_hashes(file_path)
+
+            if hashes is None:
+                print("File does not exist")
+                continue
+
+            result = {
+                "file": file_path,
+                "hashes": hashes
+            }
+            print("\nFile Analysis Result: ")
+            print(json.dumps(result, indent=4))
+
+        # EXIT
         elif choice == "999":
             break
 
