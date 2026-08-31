@@ -108,10 +108,12 @@ def main():
                 continue
             ip_version = url_utils.get_ip_version(user_input)
 
+            virustotal_ip_result = virustotal.get_ip_report(user_input)
             result = {
                 "ip_address": user_input,
                 "valid_ip": True,
-                "version": ip_version
+                "version": ip_version,
+                "virustotal": virustotal_ip_result
             }
 
             print("\nIP Analysis:")
