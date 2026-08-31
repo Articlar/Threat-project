@@ -79,6 +79,8 @@ def main():
             certificate_info = url_utils.get_certificate_info(domain)
             heuristics = url_utils.analyze_domain(domain)
             url_analysis = url_utils.analyze_url(user_input)
+            virustotal_domain_result = virustotal.get_domain_report(domain)
+            virustotal_url_result = virustotal.get_url_report(user_input)
 
             result = {
                 "domain": domain,
@@ -88,7 +90,9 @@ def main():
                 "http_status": http_status,
                 "certificate": certificate_info,
                 "heuristics": heuristics,
-                "url_analysis": url_analysis
+                "url_analysis": url_analysis,
+                "virustotal_domain": virustotal_domain_result,
+                "virustotal_url": virustotal_url_result
             }
 
             print("\nDomain Analysis Result:")
