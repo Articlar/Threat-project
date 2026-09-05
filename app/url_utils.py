@@ -31,7 +31,9 @@ def analyze_domain(domain):
     return {
         "is_ip_address": is_ip_address(domain),
         "subdomain_count": count_subdomains(domain),
-        "domain_length": get_domain_length(domain)
+        "domain_length": get_domain_length(domain),
+        "hyphen_count": domain.count("-"),
+        "digit_count": sum(char.isdigit() for char in domain)
     }
 
 def analyze_url(user_input):

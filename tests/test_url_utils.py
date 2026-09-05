@@ -69,6 +69,13 @@ def test_analyze_domain():
     assert result["is_ip_address"] is False
     assert result["subdomain_count"] == 1
     assert result["domain_length"] == 15
+    assert result["hyphen_count"] == 0
+    assert result["digit_count"] == 0
+
+    result = analyze_domain("login-123.example.com")
+
+    assert result["hyphen_count"] == 1
+    assert result["digit_count"] == 3
 
 def test_get_ip_version():
     assert get_ip_version("8.8.8.8") == 4
