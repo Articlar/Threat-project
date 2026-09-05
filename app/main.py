@@ -4,6 +4,7 @@ import url_utils
 import json
 import virustotal
 import file_utils
+import risk_calculation
 
 
 def main():
@@ -134,10 +135,29 @@ def main():
                 print("File does not exist")
                 continue
 
+            data = database.load_database()
+            md5_result = database.lookup_hash(data, hashes["md5"])
+            sha1_result = database.lookup_hash(data, hashes["sha1"])
+            sha256_result = database.lookup_hash(data, hashes["sha256"])
+
+            virustotal_result = virustotal.get_hash_report(hashes["sha256"])
+
+            local_database_match = sha256_result is not None
+
+            risk = risk_calculation.calculate_risk(local_database_match, virustotal_result)
+            
             result = {
                 "file": file_path,
-                "hashes": hashes
+                "hashes": hashes,
+                "local_database": {
+                    "md5": md5_result,
+                    "sha1": sha1_result,
+                    "sha256": sha256_result
+                },
+                "virustotal": virustotal_result,
+                "risk": risk
             }
+            
             print("\nFile Analysis Result: ")
             print(json.dumps(result, indent=4))
 
