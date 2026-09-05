@@ -37,13 +37,19 @@ def test_get_http_info():
     assert isinstance(http_status, int) or http_status is None
 
 def test_get_certificate_info():
-    result = get_certificate_info("example.com")
+    result = get_certificate_info("google.com")
 
     assert result is not None
     assert isinstance(result, dict)
     assert "issuer" in result
     assert "subject" in result
     assert "not_after" in result
+    assert result is not None
+    assert "certificate_expired" in result
+    assert "certificate_days_remaining" in result
+
+    assert isinstance(result["certificate_expired"], bool)
+    assert isinstance(result["certificate_days_remaining"], int)
 
 def test_is_ip_address():
     assert is_ip_address("192.168.1.1") is True

@@ -5,6 +5,7 @@ import urllib.error
 from urllib.parse import urlparse
 import ipaddress
 import dns.resolver
+from datetime import datetime, timezone
 
 def count_subdomains(domain):
     parts = domain.split(".")
@@ -119,14 +120,24 @@ def get_certificate_info(domain):
         with socket.create_connection((domain, 443), timeout=5) as sock:
             with context.wrap_socket(sock, server_hostname=domain) as secure_sock:
                 certificate = secure_sock.getpeercert()
+        not_before = datetime.strptime(certificate["notBefore"],
+                                       "%b %d %H:%M:%S %Y %Z").replace(tzinfo=timezone.utc)
+
+        not_after = datetime.strptime(certificate["notAfter"],
+                                      "%b %d %H:%M:%S %Y %Z").replace(tzinfo=timezone.utc)
+
+        days_remaining = (not_after - datetime.now(timezone.utc)).days
+        certificate_expired = days_remaining < 0
 
         return {
             "issuer": certificate.get("issuer"),
             "subject": certificate.get("subject"),
             "version": certificate.get("version"),
             "serial_number": certificate.get("serialNumber"),
-            "not_before": certificate.get("notBefore"),
-            "not_after": certificate.get("notAfter")
+            "not_before": not_before,
+            "not_after": not_after,
+            "certificate_expired": certificate_expired,
+            "certificate_days_remaining": days_remaining
         }
 
     except (socket.error, ssl.SSLError):
