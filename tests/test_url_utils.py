@@ -1,16 +1,4 @@
-from app.url_utils import (
-    extract_domain, 
-    check_domain, 
-    resolve_domain, 
-    get_http_info,
-    get_certificate_info,
-    is_ip_address,
-    analyze_domain,
-    count_subdomains,
-    get_domain_length,
-    get_ip_version,
-    analyze_url
-)
+from app.url_utils import *
 
 def test_extract_domain():
     assert extract_domain("https://www.example.com") == "www.example.com"
@@ -96,8 +84,27 @@ def test_analyze_url():
     assert result["has_query"] is True
     assert result["has_fragment"] is False
     assert result["percent_encoded"] is False
+    assert result["has_at_symbol"] is False
+    assert result["is_punycode"] is False
+
+    result = analyze_url("https://example.com@evil.com")
+
+    assert result["has_at_symbol"] is True
+
+    result = analyze_url("https://xn--example.com")
+
+    assert result["is_punycode"] is True
 
 def test_analyze_url_encoded():
     result = analyze_url("https://example.com/%2Fadmin")
 
     assert result["percent_encoded"] is True
+
+def test_get_dns_records():
+    result = get_dns_records("google.com")
+
+    assert isinstance(result, dict)
+
+    for record_type in ["A", "AAAA", "MX", "NS", "CNAME", "TXT"]:
+        assert record_type in result
+        assert isinstance(result[record_type], list)

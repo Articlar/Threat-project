@@ -4,6 +4,7 @@ import urllib.request
 import urllib.error
 from urllib.parse import urlparse
 import ipaddress
+import dns.resolver
 
 def count_subdomains(domain):
     parts = domain.split(".")
@@ -44,7 +45,11 @@ def analyze_url(user_input):
         "query_length": len(parsed_url.query),
         "has_query": bool(parsed_url.query),
         "has_fragment": bool(parsed_url.fragment),
-        "percent_encoded": "%" in user_input
+        "percent_encoded": "%" in user_input,
+        "has_at_symbol": "@" in user_input,
+        "is_punycode": any(part.startswith("xn--") 
+                           for part in parsed_url.hostname.split(".")) 
+                           if parsed_url.hostname else False
     }
 
 def extract_domain(user_input):
@@ -124,3 +129,22 @@ def get_certificate_info(domain):
 
     except (socket.error, ssl.SSLError):
         return None
+
+def get_dns_records(domain):
+    record_types = ["A", "AAAA", "MX", "NS", "CNAME", "TXT"]
+    records = {}
+
+    for record_type in record_types:
+        try:
+            answers = dns.resolver.resolve(domain, record_type)
+
+            records[record_type] = [
+                answer.to_text()
+                for answer in answers
+            ]
+
+        except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN,
+                dns.resolver.NoNameservers, dns.exception.Timeout):
+            records[record_type] = []
+
+    return records

@@ -78,17 +78,20 @@ def main():
                 print("Domain does not resolve")
                 continue
 
+            # Fetch from url_utils module
             https_status, http_status = url_utils.get_http_info(domain)
             certificate_info = url_utils.get_certificate_info(domain)
             heuristics = url_utils.analyze_domain(domain)
             url_analysis = url_utils.analyze_url(user_input)
             virustotal_domain_result = virustotal.get_domain_report(domain)
             virustotal_url_result = virustotal.get_url_report(user_input)
+            dns_records = url_utils.get_dns_records(domain)
 
             result = {
                 "domain": domain,
                 "valid_domain": True,
                 "ip_address": ip_address,
+                "dns_records": dns_records,
                 "https_status": https_status,
                 "http_status": http_status,
                 "certificate": certificate_info,
@@ -157,7 +160,7 @@ def main():
                 "virustotal": virustotal_result,
                 "risk": risk
             }
-            
+
             print("\nFile Analysis Result: ")
             print(json.dumps(result, indent=4))
 
