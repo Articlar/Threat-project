@@ -42,10 +42,12 @@ The objective of this project was to gain hands-on experience with several areas
 - Risk Scoring
 Risk scores vary by analysis type.
 Scores are capped at 100. 
-0-29 : Low Risk
-30-69: Suspicious
-70-100: Malicious
-N/A : Unknown
+| Score | Verdict | Meaning |
+|---:|---|---|
+| 0–29 | LOW_RISK | Little or no evidence of malicious activity |
+| 30–69 | SUSPICIOUS | Some indicators of potentially malicious activity |
+| 70–100 | MALICIOUS | Strong evidence of malicious activity |
+| — | UNKNOWN | No sufficient reputation data available |
 
 # Installation
 
