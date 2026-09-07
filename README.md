@@ -41,7 +41,8 @@ The objective of this project was to gain hands-on experience with several areas
 
 - Risk Scoring
 Risk scores vary by analysis type.
-Scores are capped at 100. 
+Scores are capped at 100.
+| Score | Verdict | Meaning |
 | Score | Verdict | Meaning |
 |---:|---|---|
 | 0–29 | LOW_RISK | Little or no evidence of malicious activity |
