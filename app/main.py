@@ -143,18 +143,27 @@ def main():
                 continue
 
             data = database.load_database()
+
             md5_result = database.lookup_hash(data, hashes["md5"])
             sha1_result = database.lookup_hash(data, hashes["sha1"])
             sha256_result = database.lookup_hash(data, hashes["sha256"])
-
             virustotal_result = virustotal.get_hash_report(hashes["sha256"])
 
-            local_database_match = sha256_result is not None
+            file_metadata = file_utils.get_file_metadata(file_path)
+            file_type_analysis = file_utils.analyze_file_type(file_path)
+            detected_type = file_utils.detect_file_type(file_path)
+            type_mismatch = file_utils.check_file_type_mismatch(file_path)
 
+            local_database_match = sha256_result is not None
+            
             risk = risk_calculation.calculate_risk(local_database_match, virustotal_result)
             
             result = {
                 "file": file_path,
+                "metadata": file_metadata,
+                "file_type": file_type_analysis,
+                "detected_type": detected_type,
+                "type_mismatch": type_mismatch,
                 "hashes": hashes,
                 "local_database": {
                     "md5": md5_result,
