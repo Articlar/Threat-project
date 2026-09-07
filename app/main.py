@@ -1,7 +1,7 @@
 import hash_utils
 import database
 import url_utils
-import json
+import output
 import virustotal
 import file_utils
 import risk_calculation
@@ -50,8 +50,7 @@ def main():
                 result["status"] = data["type"]
                 result["description"] = data["description"]
 
-            print("\n Hash Analysis Result")
-            print(json.dumps(result, indent=4))
+            output.print_hash_result(result)
 
         # Domain Analysis Option
         elif choice == "2":
@@ -105,8 +104,7 @@ def main():
                 "risk": risk_result
             }
 
-            print("\nDomain Analysis Result:")
-            print(json.dumps(result, indent=4))
+            output.print_domain_result(result)
 
         # IP Analysis Choice
         elif choice == "3":
@@ -133,8 +131,7 @@ def main():
                 "risk_result": risk_result
             }
 
-            print("\nIP Analysis:")
-            print(json.dumps(result, indent=4))
+            output.print_ip_result(result)
 
         # File Analysis Option
         elif choice == "4":
@@ -180,8 +177,7 @@ def main():
                 "risk": risk
             }
 
-            print("\nFile Analysis Result: ")
-            print(json.dumps(result, indent=4))
+            output.print_file_result(result)
 
         # EXIT
         elif choice == "999":
