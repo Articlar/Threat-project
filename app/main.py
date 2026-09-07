@@ -113,13 +113,17 @@ def main():
             if not url_utils.is_ip_address(user_input):
                 print("Invalid IP Address")
                 continue
+
             ip_version = url_utils.get_ip_version(user_input)
+            ip_analysis = url_utils.analyze_ip(user_input)
 
             virustotal_ip_result = virustotal.get_ip_report(user_input)
+
             result = {
                 "ip_address": user_input,
                 "valid_ip": True,
                 "version": ip_version,
+                "analysis": ip_analysis,
                 "virustotal": virustotal_ip_result
             }
 

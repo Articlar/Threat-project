@@ -24,7 +24,11 @@ def is_ip_address(address):
 def get_ip_version(address):
     try:
         ip = ipaddress.ip_address(address)
-        return ip.version
+
+        if ip.version == 4:
+            return "IPv4"
+        else:
+            return "IPv6"
     except ValueError:
         return None
 
@@ -55,6 +59,21 @@ def analyze_url(user_input):
                            if parsed_url.hostname else False
     }
 
+def analyze_ip(ip_address):
+    try:
+        address = ipaddress.ip_address(ip_address)
+
+        return {
+            "version": address.version,
+            "is_private": address.is_private,
+            "is_global": address.is_global,
+            "is_loopback": address.is_loopback,
+            "is_reserved": address.is_reserved
+        }
+    
+    except ValueError:
+        return None
+    
 def extract_domain(user_input):
     if "://" not in user_input:
         user_input = "https://" + user_input
@@ -79,6 +98,7 @@ def check_domain(domain):
         for char in part:
             if char not in allowed_chars:
                 return False
+            
         # Check for leading/trailing hyphens
         if part[0] == '-' or part[-1] == '-':
             return False
@@ -120,6 +140,9 @@ def get_certificate_info(domain):
         with socket.create_connection((domain, 443), timeout=5) as sock:
             with context.wrap_socket(sock, server_hostname=domain) as secure_sock:
                 certificate = secure_sock.getpeercert()
+                tls_version = secure_sock.version()
+                cipher = secure_sock.cipher()
+        
         not_before = datetime.strptime(certificate["notBefore"],
                                        "%b %d %H:%M:%S %Y %Z").replace(tzinfo=timezone.utc)
 
@@ -137,7 +160,9 @@ def get_certificate_info(domain):
             "not_before": not_before,
             "not_after": not_after,
             "certificate_expired": certificate_expired,
-            "certificate_days_remaining": days_remaining
+            "certificate_days_remaining": days_remaining,
+            "tls_version": tls_version,
+            "cipher": cipher
         }
 
     except (socket.error, ssl.SSLError):

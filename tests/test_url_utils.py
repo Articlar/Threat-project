@@ -47,9 +47,14 @@ def test_get_certificate_info():
     assert result is not None
     assert "certificate_expired" in result
     assert "certificate_days_remaining" in result
+    assert "tls_version" in result
+    assert "cipher in result"
 
     assert isinstance(result["certificate_expired"], bool)
     assert isinstance(result["certificate_days_remaining"], int)
+
+    assert result["tls_version"] is not None
+    assert result["cipher"] is not None
 
 def test_is_ip_address():
     assert is_ip_address("192.168.1.1") is True
@@ -84,8 +89,8 @@ def test_analyze_domain():
     assert result["digit_count"] == 3
 
 def test_get_ip_version():
-    assert get_ip_version("8.8.8.8") == 4
-    assert get_ip_version("2001:4860:4860::8888") == 6
+    assert get_ip_version("8.8.8.8") == "IPv4"
+    assert get_ip_version("2001:4860:4860::8888") == "IPv6"
     assert get_ip_version("example.com") is None
 
 def test_analyze_url():
@@ -121,3 +126,18 @@ def test_get_dns_records():
     for record_type in ["A", "AAAA", "MX", "NS", "CNAME", "TXT"]:
         assert record_type in result
         assert isinstance(result[record_type], list)
+
+def test_analyze_ip():
+    result = analyze_ip("8.8.8.8")
+
+    assert result is not None
+    assert result["version"] == 4
+    assert result["is_global"] is True
+    assert result["is_private"] is False
+
+    result = analyze_ip("192.168.1.1")
+
+    assert result["is_private"] is True
+    assert result["is_global"] is False
+
+    assert analyze_ip("not-an-ip") is None
