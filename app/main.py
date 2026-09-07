@@ -32,6 +32,7 @@ def main():
             data = database.lookup_hash(known_hashes, user_input)
 
             virustotal_result = virustotal.get_hash_report(user_input)
+            risk_result = risk_calculation.calculate_risk_hash(data is not None, virustotal_result)
 
             result = {
                 "hash": user_input,
@@ -40,7 +41,8 @@ def main():
                 "name": None,
                 "status": None,
                 "description": None,
-                "virustotal": virustotal_result
+                "virustotal": virustotal_result,
+                "risk_score": risk_result
             }
 
             if data is not None:
@@ -87,6 +89,7 @@ def main():
             virustotal_url_result = virustotal.get_url_report(user_input)
             dns_records = url_utils.get_dns_records(domain)
 
+            risk_result = risk_calculation.calculate_risk_domain(virustotal_domain_result, heuristics, url_analysis, certificate_info)
             result = {
                 "domain": domain,
                 "valid_domain": True,
@@ -98,7 +101,8 @@ def main():
                 "heuristics": heuristics,
                 "url_analysis": url_analysis,
                 "virustotal_domain": virustotal_domain_result,
-                "virustotal_url": virustotal_url_result
+                "virustotal_url": virustotal_url_result,
+                "risk": risk_result
             }
 
             print("\nDomain Analysis Result:")
@@ -118,13 +122,15 @@ def main():
             ip_analysis = url_utils.analyze_ip(user_input)
 
             virustotal_ip_result = virustotal.get_ip_report(user_input)
+            risk_result = risk_calculation.calculate_risk_ip(virustotal_ip_result, ip_analysis)
 
             result = {
                 "ip_address": user_input,
                 "valid_ip": True,
                 "version": ip_version,
                 "analysis": ip_analysis,
-                "virustotal": virustotal_ip_result
+                "virustotal": virustotal_ip_result,
+                "risk_result": risk_result
             }
 
             print("\nIP Analysis:")
@@ -156,7 +162,7 @@ def main():
 
             local_database_match = sha256_result is not None
             
-            risk = risk_calculation.calculate_risk(local_database_match, virustotal_result)
+            risk = risk_calculation.calculate_risk_file(local_database_match, virustotal_result, type_mismatch)
             
             result = {
                 "file": file_path,
