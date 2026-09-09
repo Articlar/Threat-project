@@ -48,7 +48,7 @@ def test_get_certificate_info():
     assert "certificate_expired" in result
     assert "certificate_days_remaining" in result
     assert "tls_version" in result
-    assert "cipher in result"
+    assert "cipher" in result
 
     assert isinstance(result["certificate_expired"], bool)
     assert isinstance(result["certificate_days_remaining"], int)
